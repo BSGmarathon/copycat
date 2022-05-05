@@ -1,0 +1,25 @@
+{
+  "name": "copycat",
+  "version": "1.0.0",
+  "description": "Program that copies stgame + title from 1 twitch account to the other, and plays ads on every change",
+  "main": "copycat.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BSGmarathon/copycat.git"
+  },
+  "author": "Riek-lt",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BSGmarathon/copycat/issues"
+  },
+  "homepage": "https://github.com/BSGmarathon/copycat#readme",
+  "dependencies": {
+    "dotenv": "^16.0.0",
+    "fetch": "^1.1.0",
+    "node-fetch": "^3.2.4"
+  }
+}
