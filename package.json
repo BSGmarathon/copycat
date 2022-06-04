@@ -1,7 +1,7 @@
 {
   "name": "copycat",
   "version": "1.0.0",
-  "description": "Program that copies stgame + title from 1 twitch account to the other, and plays ads on every change",
+  "description": "Program that copies game + title from 1 twitch account to the other, and plays ads on every change",
   "main": "copycat.js",
   "type": "module",
   "scripts": {

@@ -9,7 +9,8 @@ var esaTitle = "";
 var bsgTitle = "";
 var interval = "2"; //in minutes
 var bsgChannelID = '30685577'; //receiving channels
-var esaChannelID = '54739364'; //giving channel
+// var esaChannelID = '54739364'; //giving channel
+var esaChannelID = '277226652' //McRaeathon
 
 logic();
 setInterval(function() {
@@ -19,6 +20,7 @@ setInterval(function() {
 
 function logic() {
   getGame();
+  // startAd();               //Debug only no touch
   setTimeout(function() {
     if (esaGameId !== bsgGameId) {
       setGame();
