@@ -7,10 +7,10 @@ var bsgGameId = "";
 var esaGame = "";
 var esaTitle = "";
 var bsgTitle = "";
-var interval = "2"; //in minutes
-var readerChannelID = '54739364'; //giving channel, ESA
+var interval = process.env.INTERVAL; //in minutes
+var readerChannelID = process.env.READERID;    //giving channel, ESA
 // var readerChannelID = '277226652' //McRaeathon
-var targetChannelID = '30685577'; //receiving channels, BSG
+var targetChannelID = process.env.TARGETID;     //receiving channels, BSG
 
 logic();
 setInterval(function() {
