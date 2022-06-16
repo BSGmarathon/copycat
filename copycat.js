@@ -8,9 +8,9 @@ var esaGame = "";
 var esaTitle = "";
 var bsgTitle = "";
 var interval = "2"; //in minutes
-var bsgChannelID = '30685577'; //receiving channels
-// var esaChannelID = '54739364'; //giving channel
-var esaChannelID = '277226652' //McRaeathon
+var readerChannelID = '54739364'; //giving channel, ESA
+// var readerChannelID = '277226652' //McRaeathon
+var targetChannelID = '30685577'; //receiving channels, BSG
 
 logic();
 setInterval(function() {
@@ -32,7 +32,7 @@ function logic() {
 }
 
 function getGame() { //scope channel_editor
-  fetch('https://api.twitch.tv/helix/channels?broadcaster_id='+esaChannelID, {
+  fetch('https://api.twitch.tv/helix/channels?broadcaster_id='+readerChannelID, {
       method: 'GET',
       headers: {
         'Authorization': 'Bearer ' + process.env.LOOKUP_AUTH,
@@ -48,7 +48,7 @@ function getGame() { //scope channel_editor
       console.log("ESA Game saved: " + esaGameId + " " + res.data[0].game_name);
     });
 
-  fetch('https://api.twitch.tv/helix/channels?broadcaster_id='+bsgChannelID, {
+  fetch('https://api.twitch.tv/helix/channels?broadcaster_id='+targetChannelID, {
       method: 'GET',
       headers: {
         'Authorization': 'Bearer ' + process.env.LOOKUP_AUTH,
@@ -65,7 +65,7 @@ function getGame() { //scope channel_editor
 }
 
 function setGame() {
-  postRequest('https://api.twitch.tv/helix/channels?broadcaster_id='+bsgChannelID)
+  postRequest('https://api.twitch.tv/helix/channels?broadcaster_id='+targetChannelID)
     .then(data => console.log(""))
     // .catch(error => console.error(error))
     .catch(error => console.error())
@@ -95,7 +95,7 @@ function startAd() {
   function postRequest(url, data) {
     return fetch(url, {
         method: 'POST', // 'GET', 'PUT', 'DELETE', etc.
-        body: '{"broadcaster_id": '+bsgChannelID+', "length": 180}', // Coordinate the body type with 'Content-Type'
+        body: '{"broadcaster_id": '+targetChannelID+', "length": 180}', // Coordinate the body type with 'Content-Type'
         headers: {
           'Client-ID': process.env.CLIENTID,
           'Authorization': 'Bearer ' + process.env.ADAUTH, //scope channel:edit:commercial
