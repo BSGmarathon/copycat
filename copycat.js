@@ -1,6 +1,9 @@
 // require('dotenv').config();
+//Scopes channel_editor channel:manage:broadcast channel:edit:commercial
 import dotenv from "dotenv";
-dotenv.config({ silent: process.env.NODE_ENV === 'production' });
+dotenv.config({
+  silent: process.env.NODE_ENV === 'production'
+});
 import fetch from 'node-fetch';
 var esaGameId = "";
 var bsgGameId = "";
@@ -8,9 +11,9 @@ var esaGame = "";
 var esaTitle = "";
 var bsgTitle = "";
 var interval = process.env.INTERVAL; //in minutes
-var readerChannelID = process.env.READERID;    //giving channel, ESA
+var readerChannelID = process.env.READERID; //giving channel, ESA
 // var readerChannelID = '277226652' //McRaeathon
-var targetChannelID = process.env.TARGETID;     //receiving channels, BSG
+var targetChannelID = process.env.TARGETID; //receiving channels, BSG
 
 logic();
 setInterval(function() {
@@ -32,10 +35,11 @@ function logic() {
 }
 
 function getGame() { //scope channel_editor
-  fetch('https://api.twitch.tv/helix/channels?broadcaster_id='+readerChannelID, {
+  fetch('https://api.twitch.tv/helix/channels?broadcaster_id=' + readerChannelID, {
       method: 'GET',
       headers: {
-        'Authorization': 'Bearer ' + process.env.LOOKUP_AUTH,
+        // 'Authorization': 'Bearer ' + process.env.LOOKUP_AUTH,
+        'Authorization': 'Bearer ' + process.env.BUNDLEAUTH,
         'Client-Id': process.env.CLIENTID
       }
     })
@@ -48,16 +52,17 @@ function getGame() { //scope channel_editor
       console.log("ESA Game saved: " + esaGameId + " " + res.data[0].game_name);
     });
 
-  fetch('https://api.twitch.tv/helix/channels?broadcaster_id='+targetChannelID, {
+  fetch('https://api.twitch.tv/helix/channels?broadcaster_id=' + targetChannelID, {
       method: 'GET',
       headers: {
-        'Authorization': 'Bearer ' + process.env.LOOKUP_AUTH,
+        // 'Authorization': 'Bearer ' + process.env.LOOKUP_AUTH,
+        'Authorization': 'Bearer ' + process.env.BUNDLEAUTH,
         'Client-Id': process.env.CLIENTID
       }
     })
     .then(res => res.json())
     .then(res => {
-            console.log(res);
+      console.log(res);
       bsgGameId = res.data[0].game_id;
       bsgTitle = res.data[0].title;
       console.log("BSG Game saved: " + bsgGameId + ' ' + res.data[0].game_name);
@@ -65,7 +70,7 @@ function getGame() { //scope channel_editor
 }
 
 function setGame() {
-  postRequest('https://api.twitch.tv/helix/channels?broadcaster_id='+targetChannelID)
+  postRequest('https://api.twitch.tv/helix/channels?broadcaster_id=' + targetChannelID)
     .then(data => console.log(""))
     // .catch(error => console.error(error))
     .catch(error => console.error())
@@ -76,7 +81,8 @@ function setGame() {
         body: '{"game_id": "' + esaGameId + '", "title": "' + esaTitle + '"}', // Coordinate the body type with 'Content-Type'
         headers: {
           'Client-ID': process.env.CLIENTID,
-          'Authorization': 'Bearer ' + process.env.POSTAUTH, //scope channel:manage:broadcast
+          'Authorization': 'Bearer ' + process.env.BUNDLEAUTH,
+          // 'Authorization': 'Bearer ' + process.env.POSTAUTH, //scope channel:manage:broadcast
           // 'Accept': 'application/vnd.twitchtv.v5+json',
           'Content-Type': 'application/json'
         },
@@ -95,10 +101,11 @@ function startAd() {
   function postRequest(url, data) {
     return fetch(url, {
         method: 'POST', // 'GET', 'PUT', 'DELETE', etc.
-        body: '{"broadcaster_id": '+targetChannelID+', "length": 180}', // Coordinate the body type with 'Content-Type'
+        body: '{"broadcaster_id": ' + targetChannelID + ', "length": 180}', // Coordinate the body type with 'Content-Type'
         headers: {
           'Client-ID': process.env.CLIENTID,
-          'Authorization': 'Bearer ' + process.env.ADAUTH, //scope channel:edit:commercial
+          // 'Authorization': 'Bearer ' + process.env.ADAUTH, //scope channel:edit:commercial
+          'Authorization': 'Bearer ' + process.env.BUNDLEAUTH,
           // 'Accept': 'application/vnd.twitchtv.v5+json',
           'Content-Type': 'application/json'
         },
