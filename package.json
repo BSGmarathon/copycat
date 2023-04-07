@@ -21,5 +21,9 @@
     "dotenv": "^16.0.0",
     "fetch": "^1.1.0",
     "node-fetch": "^3.2.4"
+  },
+  "devDependencies": {
+    "@types/node": "^18.15.11",
+    "typescript": "^5.0.4"
   }
 }
