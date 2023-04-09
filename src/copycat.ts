@@ -10,8 +10,29 @@ let bsgGameId = '';
 let esaTitle = '';
 let bsgTitle = '';
 
-let esaChannelID = '54739364'; //giving channel (esamarathon)
-let bsgChannelID = '91097747'; //receiving channels (duncte123)
+const esaChannelID = '54739364'; //giving channel (esamarathon)
+const bsgChannelID = '91097747'; //receiving channels (duncte123)
+
+const interval = 2;
+
+logic();
+const timer = setInterval(() => logic(), interval * 60 * 1000);
+
+async function logic() {
+  try {
+    await fetchGameInfo();
+
+    if (esaGameId !== bsgGameId) {
+      await setGame();
+      await startAd();
+    } else {
+      console.log('No update');
+    }
+  } catch (e) {
+    console.log('Error during update, timer will be stopped', e);
+    clearInterval(timer);
+  }
+}
 
 async function fetchGameInfo(): Promise<void> {
   const response = await fetch(

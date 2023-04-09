@@ -1,3 +1,5 @@
+// NOTE: this is an old version of copycat and it might not work anymore. please use the typescript version.
+
 // require('dotenv').config();
 //Scopes channel_editor channel:manage:broadcast channel:edit:commercial
 import dotenv from "dotenv";
