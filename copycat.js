@@ -39,7 +39,7 @@ function getGame() { //scope channel_editor
       method: 'GET',
       headers: {
         // 'Authorization': 'Bearer ' + process.env.LOOKUP_AUTH,
-        'Authorization': 'Bearer ' + process.env.BUNDLEAUTH,
+        'Authorization': 'Bearer ' + process.env.AUTH_TOKEN,
         'Client-Id': process.env.CLIENTID
       }
     })
@@ -56,7 +56,7 @@ function getGame() { //scope channel_editor
       method: 'GET',
       headers: {
         // 'Authorization': 'Bearer ' + process.env.LOOKUP_AUTH,
-        'Authorization': 'Bearer ' + process.env.BUNDLEAUTH,
+        'Authorization': 'Bearer ' + process.env.AUTH_TOKEN,
         'Client-Id': process.env.CLIENTID
       }
     })
@@ -81,7 +81,7 @@ function setGame() {
         body: '{"game_id": "' + esaGameId + '", "title": "' + esaTitle + '"}', // Coordinate the body type with 'Content-Type'
         headers: {
           'Client-ID': process.env.CLIENTID,
-          'Authorization': 'Bearer ' + process.env.BUNDLEAUTH,
+          'Authorization': 'Bearer ' + process.env.AUTH_TOKEN,
           // 'Authorization': 'Bearer ' + process.env.POSTAUTH, //scope channel:manage:broadcast
           // 'Accept': 'application/vnd.twitchtv.v5+json',
           'Content-Type': 'application/json'
@@ -105,7 +105,7 @@ function startAd() {
         headers: {
           'Client-ID': process.env.CLIENTID,
           // 'Authorization': 'Bearer ' + process.env.ADAUTH, //scope channel:edit:commercial
-          'Authorization': 'Bearer ' + process.env.BUNDLEAUTH,
+          'Authorization': 'Bearer ' + process.env.AUTH_TOKEN,
           // 'Accept': 'application/vnd.twitchtv.v5+json',
           'Content-Type': 'application/json'
         },

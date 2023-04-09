@@ -3,3 +3,4 @@ node_modules
 build/
 copycat-me-fixes.js
 .env
+docker-compose.override.yml

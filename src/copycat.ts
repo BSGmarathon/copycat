@@ -19,8 +19,8 @@ async function fetchGameInfo(): Promise<void> {
     {
       method: 'GET',
       headers: {
-        'Authorization': `Bearer ${process.env.BUNDLEAUTH}`,
-        'Client-Id': process.env.CLIENTID!,
+        'Authorization': `Bearer ${process.env.AUTH_TOKEN}`,
+        'Client-Id': process.env.CLIENTID,
       },
     }
   );
@@ -46,8 +46,8 @@ async function setGame(): Promise<void> {
   await fetch(`https://api.twitch.tv/helix/channels?broadcaster_id=${bsgChannelID}`, {
     method: 'PATCH',
     headers: {
-      'Authorization': `Bearer ${process.env.BUNDLEAUTH}`,
-      'Client-Id': process.env.CLIENTID!,
+      'Authorization': `Bearer ${process.env.AUTH_TOKEN}`,
+      'Client-Id': process.env.CLIENTID,
     },
     body: JSON.stringify({
       game_id: esaGameId,
@@ -60,8 +60,8 @@ async function startAd(): Promise<void> {
   const response = await fetch('https://api.twitch.tv/helix/channels/commercial', {
     method: 'POST',
     headers: {
-      'Client-ID': process.env.CLIENTID!,
-      'Authorization': `Bearer ${process.env.BUNDLEAUTH}`,
+      'Client-ID': process.env.CLIENTID,
+      'Authorization': `Bearer ${process.env.AUTH_TOKEN}`,
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
