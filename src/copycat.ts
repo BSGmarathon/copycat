@@ -1,11 +1,25 @@
+import axios from 'axios';
 import dotenv from 'dotenv';
-import fetch from 'node-fetch';
-import { ChannelInformation, TwitchData } from '@/types/twitch';
+import { ChannelInformation, ExtendedChannelInformation, TwitchData } from '@/types';
+import { setupAutoRefreshing } from '@/auth';
 
 dotenv.config();
 
+// setup axios defaults
+axios.defaults.baseURL = 'https://api.twitch.tv/helix';
+axios.defaults.headers.common['Client-ID'] = process.env.CLIENTID;
+
+// TODO: remove, backwards compatibility.
+if (process.env.AUTH_TOKEN) {
+  axios.defaults.headers.common['Authorization'] = `Bearer ${process.env.AUTH_TOKEN}`;
+}
+
+axios.defaults.headers.common['Content-Type'] = 'application/json';
+
 let esaGameId = '';
 let bsgGameId = '';
+
+let isBsgLive = false;
 
 let esaTitle = '';
 let bsgTitle = '';
@@ -13,10 +27,8 @@ let bsgTitle = '';
 const esaChannelID = '54739364'; //giving channel (esamarathon)
 const bsgChannelID = '91097747'; //receiving channels (duncte123)
 
-const interval = 2;
-
-logic();
-const timer = setInterval(() => logic(), interval * 60 * 1000);
+const interval = parseInt(process.env.INTERVAL || '2', 10);
+let timer: NodeJS.Timer;
 
 async function logic() {
   try {
@@ -24,7 +36,10 @@ async function logic() {
 
     if (esaGameId !== bsgGameId) {
       await setGame();
-      await startAd();
+
+      if (isBsgLive) {
+        await startAd();
+      }
     } else {
       console.log('No update');
     }
@@ -35,18 +50,9 @@ async function logic() {
 }
 
 async function fetchGameInfo(): Promise<void> {
-  const response = await fetch(
-    `https://api.twitch.tv/helix/channels?broadcaster_id=${esaChannelID}&broadcaster_id=${bsgChannelID}`,
-    {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${process.env.AUTH_TOKEN}`,
-        'Client-Id': process.env.CLIENTID,
-      },
-    }
+  const { data: json } = await axios.get<TwitchData<ChannelInformation>>(
+    `/channels?broadcaster_id=${esaChannelID}&broadcaster_id=${bsgChannelID}`
   );
-
-  const json = await response.json() as TwitchData<ChannelInformation>;
 
   console.log(json);// can we guarantee the order of these?
   const esaData = json.data.find((x) => x.broadcaster_id === esaChannelID)!;
@@ -61,37 +67,37 @@ async function fetchGameInfo(): Promise<void> {
   bsgGameId = bsgData.game_id;
   bsgTitle = bsgData.title;
   console.log(`BSG Game saved: ${bsgGameId} ${bsgData.game_name}`);
+
+  await fetchBsgLiveStatus(bsgData.broadcaster_login);
+}
+
+async function fetchBsgLiveStatus(channelLogin: string): Promise<void> {
+  // https://api.twitch.tv/helix/search/channels?query=channelLogin
+
+  const { data } = await axios.get<TwitchData<ExtendedChannelInformation>>(
+    `/search/channels?query=${channelLogin}`
+  );
+
+  isBsgLive = data.data[0].is_live;
 }
 
 async function setGame(): Promise<void> {
-  await fetch(`https://api.twitch.tv/helix/channels?broadcaster_id=${bsgChannelID}`, {
-    method: 'PATCH',
-    headers: {
-      'Authorization': `Bearer ${process.env.AUTH_TOKEN}`,
-      'Client-Id': process.env.CLIENTID,
-    },
-    body: JSON.stringify({
-      game_id: esaGameId,
-      title: esaTitle,
-    }),
-  })
+  await axios.patch(`/channels?broadcaster_id=${bsgChannelID}`, {
+    game_id: esaGameId,
+    title: esaTitle,
+  });
 }
 
 async function startAd(): Promise<void> {
-  const response = await fetch('https://api.twitch.tv/helix/channels/commercial', {
-    method: 'POST',
-    headers: {
-      'Client-ID': process.env.CLIENTID,
-      'Authorization': `Bearer ${process.env.AUTH_TOKEN}`,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      broadcaster_id: bsgChannelID,
-      length: 180, // seconds
-    })
+  const { data } = await axios.post(`/channels/commercial`, {
+    broadcaster_id: bsgChannelID,
+    length: 180, // seconds
   });
 
-  const json = await response.json();
-
-  console.log(json);
+  console.log(data);
 }
+
+setupAutoRefreshing().then(() => {
+  logic();
+  timer = setInterval(() => logic(), interval * 60 * 1000);
+});
