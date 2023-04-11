@@ -13,7 +13,7 @@ WORKDIR /copycat
 COPY package-lock.json package.json ./
 RUN npm ci --omit=dev
 
-COPY --from=builder /copycat/build/copycat.js /copycat/copycat.js
+COPY --from=builder /copycat/build/. /copycat/
 
 CMD ["node", "copycat.js"]
 
