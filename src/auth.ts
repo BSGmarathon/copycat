@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { TokenResponse } from '@/types';
+import { TokenResponse } from './types';
 import { promises as fs } from 'node:fs';
 
 let isLocalToken = false;

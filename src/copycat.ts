@@ -1,6 +1,6 @@
 import axios from 'axios';
 import dotenv from 'dotenv';
-import { ChannelInformation, ExtendedChannelInformation, TwitchData } from '@/types';
+import { ChannelInformation, ExtendedChannelInformation, TwitchData } from './types';
 import { setupAutoRefreshing } from './auth';
 
 dotenv.config();
