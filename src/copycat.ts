@@ -2,6 +2,7 @@ import axios from 'axios';
 import dotenv from 'dotenv';
 import { ChannelInformation, ExtendedChannelInformation, TwitchData } from './types';
 import { setupAutoRefreshing } from './auth';
+import process from 'process';
 
 dotenv.config();
 
@@ -24,8 +25,8 @@ let isBsgLive = false;
 let esaTitle = '';
 let bsgTitle = '';
 
-const esaChannelID = '54739364'; //giving channel (esamarathon)
-const bsgChannelID = '91097747'; //receiving channels (duncte123)
+const esaChannelID = process.env.READERID || '54739364'; //giving channel (esamarathon)
+const bsgChannelID = process.env.TARGETID || '91097747'; //receiving channels (duncte123)
 
 const interval = parseInt(process.env.INTERVAL || '2', 10);
 let timer: NodeJS.Timer;
