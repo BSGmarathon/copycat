@@ -3,7 +3,7 @@
   "version": "2.0.0",
   "description": "Program that copies game + title from 1 twitch account to the other, and plays ads on every change",
   "main": "copycat.js",
-  "type": "module",
+  "type": "commonjs",
   "scripts": {
     "build": "tsc"
   },
@@ -23,7 +23,11 @@
     "node-fetch": "^3.2.4"
   },
   "devDependencies": {
+    "@koa/router": "^12.0.0",
+    "@types/koa": "^2.13.6",
+    "@types/koa__router": "^12.0.0",
     "@types/node": "^18.15.11",
+    "koa": "^2.14.2",
     "typescript": "^5.0.4"
   }
 }

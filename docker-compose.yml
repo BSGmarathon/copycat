@@ -5,6 +5,7 @@ services:
       context: .
     volumes:
       - 'copycat:/copycat-data'
+      # - './copycat-data:/copycat-data' # for local development
     environment:
       # The client id that the token is generated with
       CLIENTID: ''

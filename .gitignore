@@ -4,3 +4,4 @@ build/
 copycat-me-fixes.js
 .env
 docker-compose.override.yml
+tokenGenerator.js

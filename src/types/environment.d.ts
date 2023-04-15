@@ -3,6 +3,7 @@ declare global {
     interface ProcessEnv {
       CLIENTID: string;
       CLIENTSECRET: string;
+      SCOPES: string;
       AUTH_TOKEN: string;
       READERID: string;
       TARGETID: string;

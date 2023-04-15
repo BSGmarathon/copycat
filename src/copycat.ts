@@ -38,7 +38,10 @@ async function logic() {
       await setGame();
 
       if (isBsgLive) {
+        console.log('Starting 3 minutes of ads.');
         await startAd();
+      } else {
+        console.log('Channel is not live, not starting ad.');
       }
     } else {
       console.log('No update');
@@ -54,19 +57,19 @@ async function fetchGameInfo(): Promise<void> {
     `/channels?broadcaster_id=${esaChannelID}&broadcaster_id=${bsgChannelID}`
   );
 
-  console.log(json);// can we guarantee the order of these?
+  // console.log(json);// can we guarantee the order of these?
   const esaData = json.data.find((x) => x.broadcaster_id === esaChannelID)!;
 
   esaGameId = esaData.game_id;
   esaTitle = esaData.title;
 
-  console.log(`ESA Game saved: ${esaGameId} ${esaData.game_name}`);
+  console.log(`${esaData.broadcaster_name} Game saved: ${esaGameId} ${esaData.game_name}`);
 
   const bsgData = json.data.find((x) => x.broadcaster_id === bsgChannelID)!;
 
   bsgGameId = bsgData.game_id;
   bsgTitle = bsgData.title;
-  console.log(`BSG Game saved: ${bsgGameId} ${bsgData.game_name}`);
+  console.log(`${bsgData.broadcaster_name} Game saved: ${bsgGameId} ${bsgData.game_name}`);
 
   await fetchBsgLiveStatus(bsgData.broadcaster_login);
 }

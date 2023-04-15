@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { TokenResponse } from './types';
-import { promises as fs } from 'node:fs';
+import fs, { promises as fsPromise } from 'node:fs';
 
 let isLocalToken = false;
 const tokenPath = '/copycat-data/token.json';
@@ -35,6 +35,8 @@ async function refreshAccessToken(): Promise<number> {
     return -1;
   }
 
+  console.log('Refreshing access token...');
+
   const params = new URLSearchParams();
 
   params.append('client_id', process.env.CLIENTID);
@@ -57,21 +59,19 @@ async function refreshAccessToken(): Promise<number> {
 
   await saveToken(data);
 
+  console.log('Access token refreshed.');
+
   return data.expires_in;
 }
 
 async function getTokenData(): Promise<TokenResponse | null> {
-  const stat = await fs.stat(tokenPath);
-
-  if (stat.isFile()) {
-    return JSON.parse(await fs.readFile(tokenPath, 'utf8'));
+  if (fs.existsSync(tokenPath)) {
+    return JSON.parse(await fsPromise.readFile(tokenPath, 'utf8'));
   }
 
-  const localStat = await fs.stat(localTokenPath);
-
-  if (localStat.isFile()) {
+  if (fs.existsSync(localTokenPath)) {
     isLocalToken = true;
-    return JSON.parse(await fs.readFile(localTokenPath, 'utf8'));
+    return JSON.parse(await fsPromise.readFile(localTokenPath, 'utf8'));
   }
 
   return null;
@@ -79,8 +79,8 @@ async function getTokenData(): Promise<TokenResponse | null> {
 
 async function saveToken(token: TokenResponse) {
   if (isLocalToken) {
-    await fs.writeFile(localTokenPath, JSON.stringify(token), 'utf8');
+    await fsPromise.writeFile(localTokenPath, JSON.stringify(token), 'utf8');
   }
 
-  await fs.writeFile(tokenPath, JSON.stringify(token), 'utf8');
+  await fsPromise.writeFile(tokenPath, JSON.stringify(token), 'utf8');
 }
