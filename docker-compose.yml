@@ -1,0 +1,27 @@
+version: '3'
+services:
+  copycat:
+    build:
+      context: .
+    volumes:
+      - 'copycat:/copycat-data'
+      # - './copycat-data:/copycat-data' # for local development
+    environment:
+      # The client id that the token is generated with
+      CLIENTID: ''
+      # The client secret used to regenerate the token using the refresh token
+      CLIENTSECRET: ''
+      # (deprecated) required scopes: channel_editor channel:manage:broadcast channel:edit:commercial
+      AUTH_TOKEN: ''
+      #This is where the program gets the identity from. For our purposes it's the ESA channel
+      READERID: 54739364
+      #This is where the program writes too, and starts ads on, preferably own channel. For our purposes it's the BSG channel
+      TARGETID: 30685577
+      # This is (in minutes) how often this program should check and do the thing.
+      INTERVAL: 2
+
+volumes:
+  # this volume should contain 1 file: "token.json"
+  # The token file contains the raw json from the initial access token fetch request.
+  # During the intial setup you will need to manually upload this file.
+  copycat: {}

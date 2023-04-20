@@ -1,11 +1,11 @@
 {
   "name": "copycat",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Program that copies game + title from 1 twitch account to the other, and plays ads on every change",
   "main": "copycat.js",
-  "type": "module",
+  "type": "commonjs",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc"
   },
   "repository": {
     "type": "git",
@@ -18,8 +18,16 @@
   },
   "homepage": "https://github.com/BSGmarathon/copycat#readme",
   "dependencies": {
-    "dotenv": "^16.0.0",
-    "fetch": "^1.1.0",
+    "axios": "^1.3.5",
+    "dotenv": "^16.0.3",
     "node-fetch": "^3.2.4"
+  },
+  "devDependencies": {
+    "@koa/router": "^12.0.0",
+    "@types/koa": "^2.13.6",
+    "@types/koa__router": "^12.0.0",
+    "@types/node": "^18.15.11",
+    "koa": "^2.14.2",
+    "typescript": "^5.0.4"
   }
 }
