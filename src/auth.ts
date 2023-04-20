@@ -80,6 +80,7 @@ async function getTokenData(): Promise<TokenResponse | null> {
 async function saveToken(token: TokenResponse) {
   if (isLocalToken) {
     await fsPromise.writeFile(localTokenPath, JSON.stringify(token), 'utf8');
+	return;
   }
 
   await fsPromise.writeFile(tokenPath, JSON.stringify(token), 'utf8');
