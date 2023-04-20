@@ -20,3 +20,4 @@ This program was tailor-made for BSG, and therefore is made with the idea that t
 
 # Author
 Made by [Riekelt / Riek-lt](https://github.com/riek-lt)
+Typescript rewrite by [duncte123](https://github.com/duncte123)
