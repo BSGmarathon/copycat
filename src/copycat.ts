@@ -93,12 +93,16 @@ async function setGame(): Promise<void> {
 }
 
 async function startAd(): Promise<void> {
-  const { data } = await axios.post(`/channels/commercial`, {
-    broadcaster_id: bsgChannelID,
-    length: 180, // seconds
-  });
+  try {
+    const { data } = await axios.post(`/channels/commercial`, {
+      broadcaster_id: bsgChannelID,
+      length: 180, // seconds
+    });
 
-  console.log(data);
+    console.log(data);
+  } catch (e: any) {
+    console.error('Failed to run ads for BSG', e);
+  }
 }
 
 setupAutoRefreshing().then(() => {

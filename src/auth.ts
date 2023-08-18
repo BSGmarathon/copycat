@@ -3,6 +3,7 @@ import { TokenResponse } from './types';
 import fs, { promises as fsPromise } from 'node:fs';
 
 let isLocalToken = false;
+let canAutoRefresh = true;
 const tokenPath = '/copycat-data/token.json';
 const localTokenPath = `${process.cwd()}/token.json`;
 
@@ -26,8 +27,17 @@ export async function setupAutoRefreshing(): Promise<void> {
   await refreshToken();
 }
 
+// TODO: experimental.
+export function stopAutoRefreshing(): void {
+  canAutoRefresh = false;
+}
+
 // TODO: auto refresh token
 async function refreshAccessToken(): Promise<number> {
+  if (!canAutoRefresh) {
+    return -1;
+  }
+
   const tokenData = await getTokenData();
 
   if (!tokenData) {
